@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "azure-identity-auditor"
+version = "0.1.0"
+description = "Audit Azure AI services to ensure they use managed identities instead of hardcoded credentials"
+requires-python = ">=3.10"
+readme = "README.md"
+license = { text = "MIT" }
+dependencies = [
+    "azure-identity>=1.15",
+    "azure-mgmt-cognitiveservices>=13.0",
+    "azure-mgmt-resource>=23.0",
+    "azure-mgmt-web>=7.0",
+    "azure-mgmt-authorization>=3.0",
+    "click>=8.1",
+    "rich>=13.0",
+]
+
+[project.scripts]
+aia = "azure_identity_auditor.cli:main"
+azure-identity-auditor = "azure_identity_auditor.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.12",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+    "mypy>=1.10",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/azure_identity_auditor"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=azure_identity_auditor --cov-report=term-missing -q"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
